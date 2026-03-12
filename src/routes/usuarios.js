@@ -7,7 +7,7 @@ router.post("/cadastrar", function (req, res) {
     usuarioController.cadastrar(req, res);
 })
 
-router.get("/ranking", function (req, res) {
+router.get("/ranquear", function (req, res) {
     usuarioController.ranking(req, res);
 })
 
