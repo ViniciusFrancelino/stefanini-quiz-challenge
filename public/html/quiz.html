@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stefanini | Quiz</title>
+
+    <link rel="stylesheet" href="../css/quiz.css">
+    <link rel="icon" href="../assets/logo.png">
+</head>
+
+<body>
+    <header class="cabecalho">
+        <div class="cabecalho-esquerda">
+            <div class="logo-area">
+                Stefanini
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="../index.html" class="link-menu">Home</a></li>
+                    <li><a href="./quiz.html" class="link-menu link-ativo">Quiz</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="quiz-container" style="display: block;">
+            <div id="inicio-quiz">
+                <h1>Avaliação de Conhecimento</h1>
+                <p>Responda com a opção que melhor reflete o conhecimento da Stefanini</p>
+
+                <div id="quiz-inicio" style="text-align: center; margin-top: 40px;">
+                    <button id="inicio-quiz-btn" type="button" onclick="iniciar()">Iniciar Avaliação</button>
+                </div>
+            </div>
+
+            <form id="hapkidoquiz" style="display: block;">
+
+                <div class="questao-none" id="questao" style="display: none;">
+                    <p class="questao-numero"></p>
+                    <p class="questao-text"></p>
+                    <div class="opcao">
+                        <span>
+                            <input type="radio" id="primeiraOpcao" name="stefanini_option" class="radio"
+                                value="alternativaA" />
+                            <label for="primeiraOpcao" class="option" id="labelOpcaoUm"></label>
+                        </span>
+                        <span>
+                            <input type="radio" id="segundaOpcao" name="stefanini_option" class="radio"
+                                value="alternativaB" />
+                            <label for="segundaOpcao" class="option" id="labelOpcaoDois"></label>
+                        </span>
+                        <span>
+                            <input type="radio" id="terceiraOpcao" name="stefanini_option" class="radio"
+                                value="alternativaC" />
+                            <label for="terceiraOpcao" class="option" id="labelOpcaoTres"></label>
+                        </span>
+                        <span>
+                            <input type="radio" id="quartaOpcao" name="stefanini_option" class="radio"
+                                value="alternativaD" />
+                            <label for="quartaOpcao" class="option" id="labelOpcaoQuatro"></label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="botao-area">
+                    <button onclick="avancar()" id="btnProx" style="display: none;">Avançar</button>
+                    <button type="button" id="botao_quiz" style="display: none;" onclick="publicar()">Finalizar</button>
+                    <button type="button" id="botao_novamente" style="display: none;" onclick="tentarNovamente()">Tentar
+                        Novamente</button>
+                    <div id="resultado_mensagem" style="display: none;"></div>
+                    <span id="spanCertas" style="color: green; padding: 10px 10px 10px 10px"></span> <span
+                        id="spanErradas" style="color: red;"></span>
+                    <button type="button" id="botao_visualizar" style="display: none;"
+                        onclick="irParaDashboard()">Visualizar dashboard</button>
+                </div>
+
+            </form>
+        </div>
+    </main>
+</body>
+
+</html>
