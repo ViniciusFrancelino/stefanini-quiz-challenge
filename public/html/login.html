@@ -40,5 +40,66 @@
         </div>
     </main>
 </body>
+<script>
+    function entrar() {
+        erro_nome.innerHTML = '';
+        erro_senha.innerHTML = '';
+
+        var nomeVar = nome_input.value;
+        var senhaVar = senha_input.value;
+
+        let valid = true;
+
+        if (nomeVar === '' || !nomeVar.includes('@') || !nomeVar.includes('.')) {
+            erro_nome.innerHTML = 'Insira um nome válido.';
+            valid = false;
+        }
+        if (senhaVar === '') {
+            erro_senha.innerHTML = 'Preencha o campo senha.';
+            valid = false;
+        } else if (senhaVar.length < 6) {
+            erro_senha.innerHTML = 'A senha deve ter pelo menos 6 caracteres.';
+            valid = false;
+        }
+
+        if (!valid) return;
+
+        fetch("/usuarios/cadastrar", { 
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nomeServer: nomeVar,
+                senhaServer: senhaVar
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+                    sessionStorage.NOME_USUARIO = json[0].nome;
+                    sessionStorage.ID_USUARIO = json[0].idUsuario;
+
+                    window.location.href = "quiz.html";
+                });
+            } else {
+                errp_nome.innerHTML = "E-mail ou Senha inválidos!";
+                erro_senha.innerHTML = "E-mail ou Senha inválidos!";
+
+                resposta.text().then(texto => {
+                    console.error(texto);
+                });
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+        return false;
+    }
+</script>
 
 </html>
