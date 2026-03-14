@@ -8,7 +8,7 @@ function cadastrar(nome) {
     return database.executar(instrucaoSql);
 }
 
-function ranquear() {
+function ranquear(numero) {
     var instrucaoSql = `
         SELECT 
             u.nome, rq.pontuacao
@@ -16,7 +16,7 @@ function ranquear() {
         JOIN usuario u
             ON u.idUsuario = rq.usuario_idUsuario
         ORDER BY rq.pontuacao DESC
-        LIMIT 5;
+        LIMIT ${numero};
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);

@@ -26,7 +26,9 @@ function cadastrar(req, res) {
 }
 
 function ranquear(req, res) {
-    usuarioModel.ranquear()
+    var numero = req.params.numero
+
+    usuarioModel.ranquear(numero)
         .then(
             function (resultado) {
                 res.json(resultado);
