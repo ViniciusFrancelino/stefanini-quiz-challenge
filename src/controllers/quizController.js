@@ -1,14 +1,14 @@
 var quizModel = require("../models/quizModel");
 
 function registrar(req, res) {
-    var nome = req.body.nomeServer;
+    var usuarioId = req.body.usuarioIdServer;
     var pontuacao = req.body.pontuacaoServer;
 
-    if (nome == undefined) {
-        res.status(400).send("Seu nome está undefined!");
+    if (usuarioId == undefined) {
+        res.status(400).send("O ID do usuário está undefined!");
     } else {
 
-        quizModel.registrar(nome, pontuacao)
+        quizModel.registrar(usuarioId, pontuacao)
             .then(
                 function (resultado) {
                     res.json(resultado);

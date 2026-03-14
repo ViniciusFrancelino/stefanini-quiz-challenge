@@ -22,7 +22,7 @@
             <img src="../assets/logo.png" alt="Logo Stefanini" class="logo">
             <h2>Login</h2>
             <p class="subtitulo">Acesse o Quiz Challenge da Stefanini</p>
-            
+
             <form id="loginForm">
                 <div class="input-grupo">
                     <label for="nome">Nome</label>
@@ -41,6 +41,9 @@
     </main>
 </body>
 <script>
+    sessionStorage.NOME_USUARIO = nomeVar;
+    sessionStorage.ID_USUARIO = json.insertId;
+
     function entrar() {
         erro_nome.innerHTML = '';
         erro_senha.innerHTML = '';
@@ -50,7 +53,7 @@
 
         let valid = true;
 
-        if (nomeVar === '' || !nomeVar.includes('@') || !nomeVar.includes('.')) {
+        if (nomeVar === '') {
             erro_nome.innerHTML = 'Insira um nome válido.';
             valid = false;
         }
@@ -64,7 +67,7 @@
 
         if (!valid) return;
 
-        fetch("/usuarios/cadastrar", { 
+        fetch("/usuarios/cadastrar", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -82,14 +85,13 @@
                 resposta.json().then(json => {
                     console.log(json);
                     console.log(JSON.stringify(json));
-                    sessionStorage.NOME_USUARIO = json[0].nome;
-                    sessionStorage.ID_USUARIO = json[0].idUsuario;
+                    sessionStorage.ID_USUARIO = json.insertId;
 
                     window.location.href = "quiz.html";
                 });
             } else {
-                errp_nome.innerHTML = "E-mail ou Senha inválidos!";
-                erro_senha.innerHTML = "E-mail ou Senha inválidos!";
+                erro_nome.innerHTML = "Nome ou Senha inválidos!";
+                erro_senha.innerHTML = "Nome ou Senha inválidos!";
 
                 resposta.text().then(texto => {
                     console.error(texto);
