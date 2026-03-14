@@ -193,7 +193,7 @@ main {
     padding: var(--espacamento-md);
     border-radius: var(--raio-borda-md);
     border-left: 5px solid var(--primary);
-    background-color: #ffeaea;
+    background-color: rgba(18, 29, 66, 0.05);
 }
 
 #resultado_mensagem h2 {
