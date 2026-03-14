@@ -14,7 +14,7 @@ function ranquear(numero) {
             u.nome, rq.pontuacao
         FROM registro_quiz rq
         JOIN usuario u
-            ON u.idUsuario = rq.usuario_idUsuario
+            ON u.nome = rq.usuario_nome
         ORDER BY rq.pontuacao DESC
         LIMIT ${numero};
     `;
