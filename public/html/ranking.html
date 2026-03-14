@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,13 +16,14 @@
         rel="stylesheet">
 
 </head>
+
 <body>
     <main>
         <div class="container">
             <img src="../assets/logo.png" alt="Logo Stefanini" class="logo">
             <h2>Ranking</h2>
             <p class="subtitulo">Veja o ranking dos participantes do Quiz Challenge da Stefanini</p>
-            
+
             <table id="rankingTable">
                 <thead>
                     <tr>
@@ -31,7 +33,7 @@
                     </tr>
                 </thead>
                 <tbody id="rankingBody">
-                    
+
                 </tbody>
             </table>
 
@@ -39,7 +41,52 @@
         </div>
     </main>
 
- 
-    
+    <script>
+        const usuarioId = sessionStorage.ID_USUARIO;
+
+        function voltarParaLogin() {
+            window.location.href = "./login.html";
+        }
+
+        function ranking() {
+            fetch(`/usuarios/ranquear/${usuarioId}`, {
+                method: "GET"
+            }).then(function (resposta) {
+                if (resposta.ok) {
+                    resposta.json().then(json => {
+                        console.log(json);
+                        exibirRanking(json);
+                    });
+                } else {
+                    console.error("Erro ao buscar o historico.");
+                }
+            }).catch(function (erro) {
+                console.log(erro);
+            });
+        }
+
+        function exibirRanking(ranking) {
+            const tabela_ranking = document.getElementById('rankingtable');
+
+            if (ranking && ranking.length > 0) {
+                for (let i = 0; i < ranking.length; i++) {
+                    const item = ranking[i];
+
+                    tabela_ranking.innerHTML += `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${item.nome}</td> 
+                            <td>${item.pontuacao}</td> 
+                        </tr>
+                    `;
+                }
+            } else {
+                tabela_ranking.innerHTML = '<tr><td>Nenhum dado de ranking encontrado.</td></tr>';
+            }
+
+        }
+    </script>
+
 </body>
+
 </html>
