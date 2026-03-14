@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stefanini | Ranking</title>
+    <title>Stefanini | Quiz Challenge - Ranking</title>
 
     <link rel="stylesheet" href="../css/ranking.css">
     <link rel="icon" href="../assets/logo.png">
@@ -44,8 +44,12 @@
     <script>
         const usuarioId = sessionStorage.ID_USUARIO;
 
+        window.onload = function() {
+            ranking();
+        };
+
         function voltarParaLogin() {
-            window.location.href = "./login.html";
+            window.location.href = "login.html";
         }
 
         function ranking() {
@@ -58,7 +62,7 @@
                         exibirRanking(json);
                     });
                 } else {
-                    console.error("Erro ao buscar o historico.");
+                    console.error("Erro ao buscar o ranking.");
                 }
             }).catch(function (erro) {
                 console.log(erro);
@@ -66,7 +70,7 @@
         }
 
         function exibirRanking(ranking) {
-            const tabela_ranking = document.getElementById('rankingtable');
+            const tabela_ranking = document.getElementById('rankingBody');
 
             if (ranking && ranking.length > 0) {
                 for (let i = 0; i < ranking.length; i++) {
@@ -75,13 +79,13 @@
                     tabela_ranking.innerHTML += `
                         <tr>
                             <td>${i + 1}</td>
-                            <td>${item.nome}</td> 
-                            <td>${item.pontuacao}</td> 
+                            <td>${item.nome}</td>
+                            <td>${item.pontuacao}</td>
                         </tr>
                     `;
                 }
             } else {
-                tabela_ranking.innerHTML = '<tr><td>Nenhum dado de ranking encontrado.</td></tr>';
+                tabela_ranking.innerHTML = '<tr><td colspan="3">Nenhum dado de ranking encontrado.</td></tr>';
             }
 
         }
