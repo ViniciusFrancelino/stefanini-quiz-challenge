@@ -1,0 +1,123 @@
+:root {
+    --primary: #121d42;
+    --secondary: #ff8038;
+    --terciaria: #332C2C;
+    --black: #000000;
+    --white: #FFFFFF;
+    --cinza: #f3f4f6;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--white) 100%);
+    min-height: 100vh;
+}
+
+main {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    background-color: rgba(0, 0, 0, 0.9);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.container h2 {
+    color: var(--white);
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.subtitulo {
+    color: var(--white);
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+#loginForm {
+    width: 100%;
+}
+
+.input-grupo {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-grupo label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--white);
+    font-size: 1em;
+}
+
+.input-grupo input[type="text"],
+.input-grupo input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--main);
+    border-radius: 8px;
+    background-color: var(--black);
+    color: var(--white);
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.input-grupo input:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 10px var(--primary);
+}
+
+.erro {
+    color: var(--primary);
+    font-size: 0.9em;
+    margin-top: 5px;
+    min-height: 20px;
+}
+
+.btn-login {
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: var(--white);
+    padding: 15px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px var(--primary);
+}
+
+.btn-login:active {
+    transform: translateY(0);
+}
