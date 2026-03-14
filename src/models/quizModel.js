@@ -1,8 +1,8 @@
 var database = require("../database/config")
 
-function registrar(idUsuario, pontuacao) {
+function registrar(nome, pontuacao) {
     var instrucaoSql = `
-        INSERT INTO registro_quiz (usuario_idUsuario, pontuacao) VALUES (${idUsuario}, ${pontuacao});
+        INSERT INTO registro_quiz (usuario_nome, pontuacao) VALUES (${nome}, ${pontuacao});
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
