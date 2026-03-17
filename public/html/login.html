@@ -30,11 +30,6 @@
                     <div id="erro_nome" class="erro"></div>
                 </div>
 
-                <div class="input-grupo">
-                    <label for="senha">Senha</label>
-                    <input type="password" id="senha_input" name="senha" placeholder="Digite sua senha" required>
-                    <div id="erro_senha" class="erro"></div>
-                </div>
                 <button class="btn-login" type="button" onclick="entrar()">Entrar</button>
             </form>
         </div>
@@ -46,22 +41,13 @@
 
     function entrar() {
         erro_nome.innerHTML = '';
-        erro_senha.innerHTML = '';
 
         var nomeVar = nome_input.value;
-        var senhaVar = senha_input.value;
 
         let valid = true;
 
         if (nomeVar === '') {
             erro_nome.innerHTML = 'Insira um nome válido.';
-            valid = false;
-        }
-        if (senhaVar === '') {
-            erro_senha.innerHTML = 'Preencha o campo senha.';
-            valid = false;
-        } else if (senhaVar.length < 6) {
-            erro_senha.innerHTML = 'A senha deve ter pelo menos 6 caracteres.';
             valid = false;
         }
 
@@ -74,7 +60,6 @@
             },
             body: JSON.stringify({
                 nomeServer: nomeVar,
-                senhaServer: senhaVar
             })
         }).then(function (resposta) {
             console.log("ESTOU NO THEN DO entrar()!")
@@ -90,8 +75,7 @@
                     window.location.href = "quiz.html";
                 });
             } else {
-                erro_nome.innerHTML = "Nome ou Senha inválidos!";
-                erro_senha.innerHTML = "Nome ou Senha inválidos!";
+                erro_nome.innerHTML = "Nome inválido!";
 
                 resposta.text().then(texto => {
                     console.error(texto);
