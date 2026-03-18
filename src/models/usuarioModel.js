@@ -11,8 +11,9 @@ function cadastrar(nome) {
 function ranquear(numero) {
     var instrucaoSql = `
         SELECT nome, pontuacao
-        FROM registro_quiz
-        JOIN usuario ON idUsuario = usuario.idUsuario
+	    FROM registro_quiz rq
+	    JOIN usuario u 
+		    ON u.idUsuario = rq.usuarioId
         ORDER BY pontuacao DESC
         LIMIT ${numero};
 
