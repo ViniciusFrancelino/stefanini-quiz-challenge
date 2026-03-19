@@ -153,6 +153,10 @@ main {
     gap: 8px;
 }
 
+.opcao input {
+    display: none;
+}
+
 .opcao label {
     display: flex;
     align-items: center;
@@ -166,6 +170,10 @@ main {
 
 .opcao label:hover {
     background-color: var(--terciaria);
+}
+
+.opcao input:checked + label {
+    background-color: var(--secondary);
 }
 
 #inicio-quiz-btn,
