@@ -25,8 +25,8 @@
             </div>
             <nav>
                 <ul class="nav-menu">
-                    <li><a href="login.html" class="link-menu">Login</a></li>
-                    <li><a href="quiz.html" class="link-menu link-ativo">Quiz</a></li>
+                    <li><a href="login.html" class="link-menu link-ativo">Quiz</a></li>
+                    <li><a href="ranking.html" class="link-menu">Ranking</a></li>
                 </ul>
             </nav>
         </div>
@@ -43,7 +43,7 @@
                 </div>
             </div>
 
-            <form id="stefanini_quiz">
+            <div id="stefanini_quiz">
 
                 <div class="questao-block" id="questao" style="display: none;">
                     <p class="questao-numero"></p>
@@ -63,29 +63,30 @@
                 <div class="botao-area">
                     <button onclick="avancar()" id="btnProx" style="display: none;">Avançar</button>
                     <button type="button" id="botao_quiz" style="display: none;" onclick="publicar()">Finalizar</button>
-                    <button type="button" id="botao_novamente" style="display: none;" onclick="tentarNovamente()">Tentar Novamente</button>
+                    <!-- <button type="button" id="botao_novamente" style="display: none;" onclick="tentarNovamente()">Tentar
+                        Novamente</button> -->
                     <div id="resultado_mensagem" style="display: none;"></div>
                     <span id="spanCertas" style="color: green; padding: 10px;"></span>
                     <span id="spanErradas" style="color: red;"></span>
-                    <button type="button" id="botao_visualizar" style="display: none;" onclick="irParaRanking()">Visualizar Ranking</button>
+                    <button type="button" id="botao_visualizar" style="display: none;"
+                        onclick="irParaRanking()">Visualizar Ranking</button>
                 </div>
-            </form>
+            </div>
         </div>
     </main>
 </body>
 <script>
 
-    var usuario = sessionStorage.NOME_USUARIO;
     var usuarioId = sessionStorage.ID_USUARIO;
 
     const listaDeQuestoes = [
 
         {
             pergunta: "Qual o ano de fundação da Stefanini?",
-            alternativaA: "1995",
+            alternativaA: "1997",
             alternativaB: "1987",
-            alternativaC: "2000",
-            alternativaD: "1986",
+            alternativaC: "1977",
+            alternativaD: "1967",
             alternativaCorreta: "alternativaB"
         },
 
@@ -94,25 +95,52 @@
             alternativaA: "Resiliência para evoluir",
             alternativaB: "Humildade para aprender",
             alternativaC: "Coragem para inovar",
-            alternativaD: "Desrespeito para competir",
-            alternativaCorreta: "alternativaD"
+            alternativaD: "Respeito para competir",
+            alternativaCorreta: "alternativaA"
         },
 
         {
             pergunta: "Em quantos países a Stefanini está presente?",
-            alternativaA: "34",
+            alternativaA: "50",
             alternativaB: "46",
-            alternativaC: "53",
-            alternativaD: "62",
+            alternativaC: "49",
+            alternativaD: "41",
             alternativaCorreta: "alternativaB"
         },
 
         {
-            pergunta: "Qual é a área de atuação da Stefanini?",
-            alternativaA: "Tecnologia da Informação",
-            alternativaB: "Consultoria Empresarial",
-            alternativaC: "Educação e Treinamento",
-            alternativaD: "Saúde e Bem-estar",
+            pergunta: "Em quantos países a Stefanini atende?",
+            alternativaA: "102",
+            alternativaB: "104",
+            alternativaC: "105",
+            alternativaD: "103",
+            alternativaCorreta: "alternativaB"
+        },
+
+        {
+            pergunta: "Quem é o fundador da empresa?",
+            alternativaA: "Rodrigo Stefanini",
+            alternativaB: "Marcus Piombo",
+            alternativaC: "Marco Stefanini",
+            alternativaD: "Guilherme Stefanini",
+            alternativaCorreta: "alternativaC"
+        },
+
+        {
+            pergunta: "Qual o nome da IA do RH da Stefanini?",
+            alternativaA: "SAI (Stefanini Artificial Intelligence)",
+            alternativaB: "Sophia",
+            alternativaC: "Sofia",
+            alternativaD: "Sophie",
+            alternativaCorreta: "alternativaD"
+        },
+
+        {
+            pergunta: "Qual o slogan da Stefanini?",
+            alternativaA: "Acreditar para Criar",
+            alternativaB: "Acreditar para Cocriar",
+            alternativaC: "Acreditar para Realizar",
+            alternativaD: "Acreditar para Maximizar",
             alternativaCorreta: "alternativaB"
         }
 
@@ -133,7 +161,6 @@
         preencherHTMLcomQuestaoAtual(0)
 
         document.getElementById('botao_quiz').style.display = "none"
-        document.getElementById('botao_novamente').style.display = "none"
     }
 
     function preencherHTMLcomQuestaoAtual(index) {
@@ -164,7 +191,7 @@
             return
         }
 
-        document.getElementById('btnProx').disabled = true
+        checarResposta()
 
         fetch(`/quiz/registrar`, {
             method: "post",
@@ -177,7 +204,7 @@
             console.log("resposta: ", resposta);
 
             if (resposta.ok) {
-                console.log("Post realizado com sucesso pelo usuario de ID: " + usuario + "!");
+                console.log("Post realizado com sucesso pelo usuario de ID: " + usuarioId + "!");
                 finalizarJogo()
             } else if (resposta.status == 404) {
                 console.log("Deu 404!");
@@ -215,24 +242,25 @@
             return false
         }
         checarResposta()
+        numeroDaQuestaoAtual++
 
         habilitarAlternativas(false)
         document.getElementById('btnProx').disabled = true
 
         if (numeroDaQuestaoAtual < quantidadeDeQuestoes - 1) {
 
-            setTimeout(() => {
-                limparCoresBackgroundOpcoes()
-                desmarcarRadioButtons()
-                preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
-                document.getElementById('btnProx').disabled = false
-            }, 1000);
+            limparCoresBackgroundOpcoes()
+            desmarcarRadioButtons()
+            preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
+            document.getElementById('btnProx').disabled = false
+
         } else {
+            limparCoresBackgroundOpcoes()
+            desmarcarRadioButtons()
+            preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
             document.getElementById('btnProx').style.display = "none"
             document.getElementById('botao_quiz').style.display = "block"
             document.getElementById('botao_quiz').disabled = false
-
-            document.getElementById('botao_quiz').onclick = publicar;
         }
     }
 
@@ -261,7 +289,6 @@
                 pontuacaoFinal++
                 certas++
                 document.getElementById("spanCertas").innerHTML = `Questões certas: ${certas}`
-                numeroDaQuestaoAtual++
             } else if (option.checked && option.value !== respostaQuestaoAtual) {
                 const wrongLabelId = option.labels[0].id
 
@@ -270,7 +297,6 @@
                 tentativaIncorreta++
                 erradas++
                 document.getElementById("spanErradas").innerHTML = `Questões erradas: ${erradas}`
-                numeroDaQuestaoAtual++
             }
         })
     }
@@ -296,12 +322,12 @@
 
         if (pontuacaoFinal === quantidadeDeQuestoes) {
             textoParaMensagemFinal = "Parabéns! Você acertou todas as questões!"
-        } else if (pontuacaoFinal >= 2) {
+        } else if (pontuacaoFinal >= 5) {
             textoParaMensagemFinal = "Muito bom! Você tem um bom conhecimento sobre a Stefanini!"
-        } else if (pontuacaoFinal >= 1) {
+        } else if (pontuacaoFinal >= 3) {
             textoParaMensagemFinal = "Você tem um conhecimento razoável sobre a Stefanini, mas pode melhorar!"
         } else {
-            textoParaMensagemFinal = "Parece que você não conhece muito bem a Stefanini. Que tal tentar novamente?"
+            textoParaMensagemFinal = "Parece que você não conhece muito bem a Stefanini."
         }
 
         document.getElementById('resultado_mensagem').style.display = "block"
@@ -312,7 +338,6 @@
 
         document.getElementById('questao').style.display = "none";
         document.getElementById('botao_quiz').style.display = "none";
-        document.getElementById('botao_novamente').style.display = "block";
         document.getElementById('botao_visualizar').style.display = "block";
     }
 

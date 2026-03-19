@@ -60,6 +60,7 @@ header.cabecalho {
     width: 50px;
     height: auto;
     margin-right: 8px;
+    filter: brightness(0) invert(1);
 }
 
 .nav-menu {
@@ -152,6 +153,10 @@ main {
     gap: 8px;
 }
 
+.opcao input {
+    display: none;
+}
+
 .opcao label {
     display: flex;
     align-items: center;
@@ -165,6 +170,10 @@ main {
 
 .opcao label:hover {
     background-color: var(--terciaria);
+}
+
+.opcao input:checked + label {
+    background-color: var(--secondary);
 }
 
 #inicio-quiz-btn,
