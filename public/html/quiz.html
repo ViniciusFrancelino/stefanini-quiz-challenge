@@ -192,7 +192,7 @@
             return
         }
 
-        document.getElementById('btnProx').disabled = true
+        checarResposta()
 
         fetch(`/quiz/registrar`, {
             method: "post",
@@ -248,7 +248,7 @@
         habilitarAlternativas(false)
         document.getElementById('btnProx').disabled = true
 
-        if (numeroDaQuestaoAtual < quantidadeDeQuestoes) {
+        if (numeroDaQuestaoAtual < quantidadeDeQuestoes - 1) {
 
             limparCoresBackgroundOpcoes()
             desmarcarRadioButtons()
@@ -256,11 +256,12 @@
             document.getElementById('btnProx').disabled = false
 
         } else {
+            limparCoresBackgroundOpcoes()
+            desmarcarRadioButtons()
+            preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
             document.getElementById('btnProx').style.display = "none"
             document.getElementById('botao_quiz').style.display = "block"
             document.getElementById('botao_quiz').disabled = false
-
-            document.getElementById('botao_quiz').onclick = publicar;
         }
     }
 
