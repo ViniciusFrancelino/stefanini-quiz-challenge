@@ -154,7 +154,7 @@ main .logo {
 }
 
 .erro {
-    color: var(--primary);
+    color: var(--secondary);
     font-size: 0.9em;
     margin-top: 5px;
     min-height: 20px;
