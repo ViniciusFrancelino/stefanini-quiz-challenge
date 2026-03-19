@@ -220,6 +220,8 @@
         const questaoAtual = listaDeQuestoes[index]
         numeroDaQuestaoAtual = index
 
+        tempoInicioQuestao = Math.floor(Date.now() / 1000);
+
         document.querySelector(".questao-numero").innerHTML = `Questão ${Number(index) + 1} de ${quantidadeDeQuestoes}`;
         document.querySelector(".questao-text").innerHTML = questaoAtual.pergunta;
         document.getElementById("labelOpcaoUm").innerHTML = questaoAtual.alternativaA;
@@ -324,6 +326,9 @@
         const questaoAtual = listaDeQuestoes[numeroDaQuestaoAtual]
         const respostaQuestaoAtual = questaoAtual.alternativaCorreta
 
+        tempoFimQuestao = Math.floor(Date.now() / 1000);
+        let tempoRespostaEmSegundos = tempoFimQuestao - tempoInicioQuestao;
+
         const options = document.getElementsByName("stefanini_option");
 
         let alternativaCorreta = null
@@ -338,7 +343,9 @@
             if (option.checked === true && option.value === respostaQuestaoAtual) {
 
                 document.getElementById(alternativaCorreta).classList.add("text-success-with-bg")
-                pontuacaoFinal++
+                let pontos = (15 - tempoRespostaEmSegundos) * 10;
+                if(pontos <= 0) pontos = 10;
+                pontuacaoFinal += pontos;
                 certas++
                 document.getElementById("spanCertas").innerHTML = `Questões certas: ${certas}`
             } else if (option.checked && option.value !== respostaQuestaoAtual) {
@@ -374,11 +381,11 @@
 
         var textoParaMensagemFinal = null;
 
-        if (pontuacaoFinal === quantidadeDeQuestoes) {
+        if (certas === quantidadeDeQuestoes) {
             textoParaMensagemFinal = "Parabéns! Você acertou todas as questões!"
-        } else if (pontuacaoFinal >= 5) {
+        } else if (certas >= 5) {
             textoParaMensagemFinal = "Muito bom! Você tem um bom conhecimento sobre a Stefanini!"
-        } else if (pontuacaoFinal >= 3) {
+        } else if (certas >= 3) {
             textoParaMensagemFinal = "Você tem um conhecimento razoável sobre a Stefanini, mas pode melhorar!"
         } else {
             textoParaMensagemFinal = "Parece que você não conhece muito bem a Stefanini."
