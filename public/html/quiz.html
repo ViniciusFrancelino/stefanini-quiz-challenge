@@ -158,7 +158,54 @@
     let erradas = 0
     let quantidadeDeQuestoes = listaDeQuestoes.length
 
+    let contador;
+    let tempoInicioQuestao;
+    let tempoFimQuestao;
+    let tempoMaximoQuizEmSegundos = 60;
+    let barraTempo = document.getElementById('barraTempo');
+
     function iniciar() {
+        let tempoRestanteEmSegundos = tempoMaximoQuizEmSegundos;
+
+        clearInterval(contador);
+        barraTempo.style.width = "100%";
+
+        contador = setInterval(() => {
+            tempoRestanteEmSegundos--
+
+            let porcentagemBarraTempo = (tempoRestanteEmSegundos / tempoMaximoQuizEmSegundos) * 100;
+            barraTempo.style.width = porcentagemBarraTempo + "%";
+
+            if (tempoRestanteEmSegundos <= 0) {
+                clearInterval(contador);
+
+                fetch(`/quiz/registrar`, {
+                    method: "post",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ usuarioIdServer: usuarioId, pontuacaoServer: pontuacaoFinal }),
+                }).then(function (resposta) {
+
+                    console.log("resposta: ", resposta);
+
+                    if (resposta.ok) {
+                        console.log("Post realizado com sucesso pelo usuario de ID: " + usuarioId + "!");
+                        finalizarJogo()
+                    } else if (resposta.status == 404) {
+                        console.log("Deu 404!");
+                        finalizarJogo()
+                    } else {
+                        throw ("Houve um erro ao tentar realizar a postagem! Código da resposta: " + resposta.status);
+                    }
+                }).catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`);
+                    finalizarJogo();
+                });
+            }
+        }, 1000)
+
+
         document.getElementById('inicio-quiz').style.display = "none"
         document.getElementById('questao').style.display = "block"
         document.getElementById('btnProx').style.display = "block"
@@ -322,6 +369,8 @@
     }
 
     function finalizarJogo() {
+        document.getElementById("containerTempo").style.display = "none";
+        clearInterval(contador);
 
         var textoParaMensagemFinal = null;
 
