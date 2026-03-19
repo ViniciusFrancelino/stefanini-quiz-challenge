@@ -68,6 +68,7 @@
                     <div id="resultado_mensagem" style="display: none;"></div>
                     <span id="spanCertas" style="color: green; padding: 10px;"></span>
                     <span id="spanErradas" style="color: red;"></span>
+                    <div id="divPontuacao"></div>
 
                     <div id="containerTempo">
                         <div id="barraTempo"></div>
@@ -396,6 +397,7 @@
 
         document.getElementById('spanCertas').innerHTML = `Certas: ${certas}`
         document.getElementById('spanErradas').innerHTML = `Erradas: ${erradas}`
+        document.getElementById('divPontuacao').innerHTML = `Pontuação: ${pontuacaoFinal}`
 
         document.getElementById('questao').style.display = "none";
         document.getElementById('botao_quiz').style.display = "none";
