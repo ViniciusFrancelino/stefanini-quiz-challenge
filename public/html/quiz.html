@@ -68,6 +68,11 @@
                     <div id="resultado_mensagem" style="display: none;"></div>
                     <span id="spanCertas" style="color: green; padding: 10px;"></span>
                     <span id="spanErradas" style="color: red;"></span>
+
+                    <div id="containerTempo">
+                        <div id="barraTempo"></div>
+                    </div>
+
                     <button type="button" id="botao_visualizar" style="display: none;"
                         onclick="irParaRanking()">Visualizar Ranking</button>
                 </div>
@@ -153,7 +158,54 @@
     let erradas = 0
     let quantidadeDeQuestoes = listaDeQuestoes.length
 
+    let contador;
+    let tempoInicioQuestao;
+    let tempoFimQuestao;
+    let tempoMaximoQuizEmSegundos = 60;
+    let barraTempo = document.getElementById('barraTempo');
+
     function iniciar() {
+        let tempoRestanteEmSegundos = tempoMaximoQuizEmSegundos;
+
+        clearInterval(contador);
+        barraTempo.style.width = "100%";
+
+        contador = setInterval(() => {
+            tempoRestanteEmSegundos--
+
+            let porcentagemBarraTempo = (tempoRestanteEmSegundos / tempoMaximoQuizEmSegundos) * 100;
+            barraTempo.style.width = porcentagemBarraTempo + "%";
+
+            if (tempoRestanteEmSegundos <= 0) {
+                clearInterval(contador);
+
+                fetch(`/quiz/registrar`, {
+                    method: "post",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ usuarioIdServer: usuarioId, pontuacaoServer: pontuacaoFinal }),
+                }).then(function (resposta) {
+
+                    console.log("resposta: ", resposta);
+
+                    if (resposta.ok) {
+                        console.log("Post realizado com sucesso pelo usuario de ID: " + usuarioId + "!");
+                        finalizarJogo()
+                    } else if (resposta.status == 404) {
+                        console.log("Deu 404!");
+                        finalizarJogo()
+                    } else {
+                        throw ("Houve um erro ao tentar realizar a postagem! Código da resposta: " + resposta.status);
+                    }
+                }).catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`);
+                    finalizarJogo();
+                });
+            }
+        }, 1000)
+
+
         document.getElementById('inicio-quiz').style.display = "none"
         document.getElementById('questao').style.display = "block"
         document.getElementById('btnProx').style.display = "block"
@@ -167,6 +219,8 @@
         habilitarAlternativas(true)
         const questaoAtual = listaDeQuestoes[index]
         numeroDaQuestaoAtual = index
+
+        tempoInicioQuestao = Math.floor(Date.now() / 1000);
 
         document.querySelector(".questao-numero").innerHTML = `Questão ${Number(index) + 1} de ${quantidadeDeQuestoes}`;
         document.querySelector(".questao-text").innerHTML = questaoAtual.pergunta;
@@ -272,6 +326,9 @@
         const questaoAtual = listaDeQuestoes[numeroDaQuestaoAtual]
         const respostaQuestaoAtual = questaoAtual.alternativaCorreta
 
+        tempoFimQuestao = Math.floor(Date.now() / 1000);
+        let tempoRespostaEmSegundos = tempoFimQuestao - tempoInicioQuestao;
+
         const options = document.getElementsByName("stefanini_option");
 
         let alternativaCorreta = null
@@ -286,7 +343,9 @@
             if (option.checked === true && option.value === respostaQuestaoAtual) {
 
                 document.getElementById(alternativaCorreta).classList.add("text-success-with-bg")
-                pontuacaoFinal++
+                let pontos = (15 - tempoRespostaEmSegundos) * 10;
+                if(pontos <= 0) pontos = 10;
+                pontuacaoFinal += pontos;
                 certas++
                 document.getElementById("spanCertas").innerHTML = `Questões certas: ${certas}`
             } else if (option.checked && option.value !== respostaQuestaoAtual) {
@@ -317,14 +376,16 @@
     }
 
     function finalizarJogo() {
+        document.getElementById("containerTempo").style.display = "none";
+        clearInterval(contador);
 
         var textoParaMensagemFinal = null;
 
-        if (pontuacaoFinal === quantidadeDeQuestoes) {
+        if (certas === quantidadeDeQuestoes) {
             textoParaMensagemFinal = "Parabéns! Você acertou todas as questões!"
-        } else if (pontuacaoFinal >= 5) {
+        } else if (certas >= 5) {
             textoParaMensagemFinal = "Muito bom! Você tem um bom conhecimento sobre a Stefanini!"
-        } else if (pontuacaoFinal >= 3) {
+        } else if (certas >= 3) {
             textoParaMensagemFinal = "Você tem um conhecimento razoável sobre a Stefanini, mas pode melhorar!"
         } else {
             textoParaMensagemFinal = "Parece que você não conhece muito bem a Stefanini."
