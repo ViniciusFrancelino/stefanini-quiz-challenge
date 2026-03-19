@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stefanini | Quiz Challenge</title>
+
+    <link rel="stylesheet" href="../css/quiz.css">
+    <link rel="icon" href="../assets/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header class="cabecalho">
+        <div class="cabecalho-esquerda">
+            <div class="logo-area">
+                <img src="../assets/logo.png" alt="Logo Stefanini" class="logo">
+                Stefanini Quiz
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="login.html" class="link-menu link-ativo">Quiz</a></li>
+                    <li><a href="ranking.html" class="link-menu">Ranking</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="quiz-container">
+            <div id="inicio-quiz">
+                <h1>Avaliação de Conhecimento</h1>
+                <p>Responda com a opção que melhor reflete o conhecimento da Stefanini</p>
+
+                <div id="quiz-inicio">
+                    <button id="inicio-quiz-btn" type="button" onclick="iniciar()">Iniciar Avaliação</button>
+                </div>
+            </div>
+
+            <div id="stefanini_quiz">
+
+                <div class="questao-block" id="questao" style="display: none;">
+                    <p class="questao-numero"></p>
+                    <p class="questao-text"></p>
+                    <div class="opcao">
+                        <input type="radio" id="primeiraOpcao" name="stefanini_option" value="alternativaA" />
+                        <label for="primeiraOpcao" id="labelOpcaoUm"></label>
+                        <input type="radio" id="segundaOpcao" name="stefanini_option" value="alternativaB" />
+                        <label for="segundaOpcao" id="labelOpcaoDois"></label>
+                        <input type="radio" id="terceiraOpcao" name="stefanini_option" value="alternativaC" />
+                        <label for="terceiraOpcao" id="labelOpcaoTres"></label>
+                        <input type="radio" id="quartaOpcao" name="stefanini_option" value="alternativaD" />
+                        <label for="quartaOpcao" id="labelOpcaoQuatro"></label>
+                    </div>
+                </div>
+
+                <div class="botao-area">
+                    <button onclick="avancar()" id="btnProx" style="display: none;">Avançar</button>
+                    <button type="button" id="botao_quiz" style="display: none;" onclick="publicar()">Finalizar</button>
+                    <div id="resultado_mensagem" style="display: none;"></div>
+                    <span id="spanCertas" style="color: green; padding: 10px;"></span>
+                    <span id="spanErradas" style="color: red;"></span>
+                    <div id="divPontuacao"></div>
+
+                    <div id="containerTempo">
+                        <div id="barraTempo"></div>
+                    </div>
+
+                    <button type="button" id="botao_visualizar" style="display: none;"
+                        onclick="irParaRanking()">Visualizar Ranking</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+<script>
+
+    var usuarioId = sessionStorage.ID_USUARIO;
+
+    const listaDeQuestoes = [
+
+        {
+            pergunta: "Qual o ano de fundação da Stefanini?",
+            alternativaA: "1997",
+            alternativaB: "1987",
+            alternativaC: "1977",
+            alternativaD: "1967",
+            alternativaCorreta: "alternativaB"
+        },
+
+        {
+            pergunta: "Qual dos valores não representa a Stefanini?",
+            alternativaA: "Resiliência para evoluir",
+            alternativaB: "Humildade para aprender",
+            alternativaC: "Coragem para inovar",
+            alternativaD: "Respeito para competir",
+            alternativaCorreta: "alternativaA"
+        },
+
+        {
+            pergunta: "Em quantos países a Stefanini está presente?",
+            alternativaA: "50",
+            alternativaB: "46",
+            alternativaC: "49",
+            alternativaD: "41",
+            alternativaCorreta: "alternativaB"
+        },
+
+        {
+            pergunta: "Em quantos países a Stefanini atende?",
+            alternativaA: "102",
+            alternativaB: "104",
+            alternativaC: "105",
+            alternativaD: "103",
+            alternativaCorreta: "alternativaB"
+        },
+
+        {
+            pergunta: "Quem é o fundador da empresa?",
+            alternativaA: "Rodrigo Stefanini",
+            alternativaB: "Marcus Piombo",
+            alternativaC: "Marco Stefanini",
+            alternativaD: "Guilherme Stefanini",
+            alternativaCorreta: "alternativaC"
+        },
+
+        {
+            pergunta: "Qual o nome da IA do RH da Stefanini?",
+            alternativaA: "SAI (Stefanini Artificial Intelligence)",
+            alternativaB: "Sophia",
+            alternativaC: "Sofia",
+            alternativaD: "Sophie",
+            alternativaCorreta: "alternativaD"
+        },
+
+        {
+            pergunta: "Qual o slogan da Stefanini?",
+            alternativaA: "Acreditar para Criar",
+            alternativaB: "Acreditar para Cocriar",
+            alternativaC: "Acreditar para Realizar",
+            alternativaD: "Acreditar para Maximizar",
+            alternativaCorreta: "alternativaB"
+        }
+
+    ]
+
+    let numeroDaQuestaoAtual = 0
+    let pontuacaoFinal = 0
+    let tentativaIncorreta = 0
+    let certas = 0
+    let erradas = 0
+    let quantidadeDeQuestoes = listaDeQuestoes.length
+
+    let contador;
+    let tempoInicioQuestao;
+    let tempoFimQuestao;
+    let tempoMaximoQuizEmSegundos = 60;
+    let barraTempo = document.getElementById('barraTempo');
+
+    function iniciar() {
+        let tempoRestanteEmSegundos = tempoMaximoQuizEmSegundos;
+
+        clearInterval(contador);
+        barraTempo.style.width = "100%";
+
+        contador = setInterval(() => {
+            tempoRestanteEmSegundos--
+
+            let porcentagemBarraTempo = (tempoRestanteEmSegundos / tempoMaximoQuizEmSegundos) * 100;
+            barraTempo.style.width = porcentagemBarraTempo + "%";
+
+            if (tempoRestanteEmSegundos <= 0) {
+                clearInterval(contador);
+
+                fetch(`/quiz/registrar`, {
+                    method: "post",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ usuarioIdServer: usuarioId, pontuacaoServer: pontuacaoFinal }),
+                }).then(function (resposta) {
+
+                    console.log("resposta: ", resposta);
+
+                    if (resposta.ok) {
+                        console.log("Post realizado com sucesso pelo usuario de ID: " + usuarioId + "!");
+                        finalizarJogo()
+                    } else if (resposta.status == 404) {
+                        console.log("Deu 404!");
+                        finalizarJogo()
+                    } else {
+                        throw ("Houve um erro ao tentar realizar a postagem! Código da resposta: " + resposta.status);
+                    }
+                }).catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`);
+                    finalizarJogo();
+                });
+            }
+        }, 1000)
+
+
+        document.getElementById('inicio-quiz').style.display = "none"
+        document.getElementById('questao').style.display = "block"
+        document.getElementById('btnProx').style.display = "block"
+
+        preencherHTMLcomQuestaoAtual(0)
+
+        document.getElementById('botao_quiz').style.display = "none"
+    }
+
+    function preencherHTMLcomQuestaoAtual(index) {
+        habilitarAlternativas(true)
+        const questaoAtual = listaDeQuestoes[index]
+        numeroDaQuestaoAtual = index
+
+        tempoInicioQuestao = Math.floor(Date.now() / 1000);
+
+        document.querySelector(".questao-numero").innerHTML = `Questão ${Number(index) + 1} de ${quantidadeDeQuestoes}`;
+        document.querySelector(".questao-text").innerHTML = questaoAtual.pergunta;
+        document.getElementById("labelOpcaoUm").innerHTML = questaoAtual.alternativaA;
+        document.getElementById("labelOpcaoDois").innerHTML = questaoAtual.alternativaB;
+        document.getElementById("labelOpcaoTres").innerHTML = questaoAtual.alternativaC;
+        document.getElementById("labelOpcaoQuatro").innerHTML = questaoAtual.alternativaD;
+    }
+
+    function publicar() {
+        const options = document.getElementsByName("stefanini_option");
+        let hasChecked = false
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].checked) {
+                hasChecked = true
+                break
+            }
+        }
+
+        if (!hasChecked) {
+            alert("Não há alternativas escolhidas. Escolha uma opção.")
+            return
+        }
+
+        checarResposta()
+
+        fetch(`/quiz/registrar`, {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ usuarioIdServer: usuarioId, pontuacaoServer: pontuacaoFinal }),
+        }).then(function (resposta) {
+
+            console.log("resposta: ", resposta);
+
+            if (resposta.ok) {
+                console.log("Post realizado com sucesso pelo usuario de ID: " + usuarioId + "!");
+                finalizarJogo()
+            } else if (resposta.status == 404) {
+                console.log("Deu 404!");
+                finalizarJogo()
+            } else {
+                throw ("Houve um erro ao tentar realizar a postagem! Código da resposta: " + resposta.status);
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+            finalizarJogo();
+        });
+        return false;
+    }
+
+    function habilitarAlternativas(trueOrFalse) {
+        let opcaoEscolhida = trueOrFalse ? false : true
+
+        document.getElementById('primeiraOpcao').disabled = opcaoEscolhida
+        document.getElementById('segundaOpcao').disabled = opcaoEscolhida
+        document.getElementById('terceiraOpcao').disabled = opcaoEscolhida
+        document.getElementById('quartaOpcao').disabled = opcaoEscolhida
+    }
+
+    function avancar() {
+        const options = document.getElementsByName("stefanini_option");
+        let hasChecked = false
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].checked) {
+                hasChecked = true
+                break
+            }
+        }
+        if (!hasChecked) {
+            alert("Não há alternativas escolhidas. Escolha uma opção.")
+            return false
+        }
+        checarResposta()
+        numeroDaQuestaoAtual++
+
+        habilitarAlternativas(false)
+        document.getElementById('btnProx').disabled = true
+
+        if (numeroDaQuestaoAtual < quantidadeDeQuestoes - 1) {
+
+            limparCoresBackgroundOpcoes()
+            desmarcarRadioButtons()
+            preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
+            document.getElementById('btnProx').disabled = false
+
+        } else {
+            limparCoresBackgroundOpcoes()
+            desmarcarRadioButtons()
+            preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
+            document.getElementById('btnProx').style.display = "none"
+            document.getElementById('botao_quiz').style.display = "block"
+            document.getElementById('botao_quiz').disabled = false
+        }
+    }
+
+    function checarResposta() {
+        const questaoAtual = listaDeQuestoes[numeroDaQuestaoAtual]
+        const respostaQuestaoAtual = questaoAtual.alternativaCorreta
+
+        tempoFimQuestao = Math.floor(Date.now() / 1000);
+        let tempoRespostaEmSegundos = tempoFimQuestao - tempoInicioQuestao;
+
+        const options = document.getElementsByName("stefanini_option");
+
+        let alternativaCorreta = null
+
+        options.forEach((option) => {
+            if (option.value === respostaQuestaoAtual) {
+                alternativaCorreta = option.labels[0].id
+            }
+        })
+
+        options.forEach((option) => {
+            if (option.checked === true && option.value === respostaQuestaoAtual) {
+
+                document.getElementById(alternativaCorreta).classList.add("text-success-with-bg")
+                let pontos = (15 - tempoRespostaEmSegundos) * 10;
+                if(pontos <= 0) pontos = 10;
+                pontuacaoFinal += pontos;
+                certas++
+                document.getElementById("spanCertas").innerHTML = `Questões certas: ${certas}`
+            } else if (option.checked && option.value !== respostaQuestaoAtual) {
+                const wrongLabelId = option.labels[0].id
+
+                document.getElementById(wrongLabelId).classList.add("text-danger-with-bg")
+                document.getElementById(alternativaCorreta).classList.add("text-success-with-bg")
+                tentativaIncorreta++
+                erradas++
+                document.getElementById("spanErradas").innerHTML = `Questões erradas: ${erradas}`
+            }
+        })
+    }
+
+    function limparCoresBackgroundOpcoes() {
+        const options = document.getElementsByName("stefanini_option");
+        options.forEach((option) => {
+            document.getElementById(option.labels[0].id).classList.remove("text-danger-with-bg")
+            document.getElementById(option.labels[0].id).classList.remove("text-success-with-bg")
+        })
+    }
+
+    function desmarcarRadioButtons() {
+        const options = document.getElementsByName("stefanini_option");
+        for (let i = 0; i < options.length; i++) {
+            options[i].checked = false;
+        }
+    }
+
+    function finalizarJogo() {
+        document.getElementById("containerTempo").style.display = "none";
+        clearInterval(contador);
+
+        var textoParaMensagemFinal = null;
+
+        if (certas === quantidadeDeQuestoes) {
+            textoParaMensagemFinal = "Parabéns! Você acertou todas as questões!"
+        } else if (certas >= 5) {
+            textoParaMensagemFinal = "Muito bom! Você tem um bom conhecimento sobre a Stefanini!"
+        } else if (certas >= 3) {
+            textoParaMensagemFinal = "Você tem um conhecimento razoável sobre a Stefanini, mas pode melhorar!"
+        } else {
+            textoParaMensagemFinal = "Parece que você não conhece muito bem a Stefanini."
+        }
+
+        document.getElementById('resultado_mensagem').style.display = "block"
+        document.getElementById('resultado_mensagem').innerHTML = textoParaMensagemFinal
+
+        document.getElementById('spanCertas').innerHTML = `Certas: ${certas}`
+        document.getElementById('spanErradas').innerHTML = `Erradas: ${erradas}`
+        document.getElementById('divPontuacao').innerHTML = `Pontuação: ${pontuacaoFinal}`
+
+        document.getElementById('questao').style.display = "none";
+        document.getElementById('botao_quiz').style.display = "none";
+        document.getElementById('botao_visualizar').style.display = "block";
+    }
+
+    function irParaRanking() {
+        window.location.href = "./ranking.html";
+    }
+
+</script>
+
+</html>
