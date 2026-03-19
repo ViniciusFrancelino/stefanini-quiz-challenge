@@ -63,8 +63,6 @@
                 <div class="botao-area">
                     <button onclick="avancar()" id="btnProx" style="display: none;">Avançar</button>
                     <button type="button" id="botao_quiz" style="display: none;" onclick="publicar()">Finalizar</button>
-                    <!-- <button type="button" id="botao_novamente" style="display: none;" onclick="tentarNovamente()">Tentar
-                        Novamente</button> -->
                     <div id="resultado_mensagem" style="display: none;"></div>
                     <span id="spanCertas" style="color: green; padding: 10px;"></span>
                     <span id="spanErradas" style="color: red;"></span>
@@ -317,10 +315,6 @@
             document.getElementById('botao_quiz').style.display = "block"
             document.getElementById('botao_quiz').disabled = false
         }
-    }
-
-    function tentarNovamente() {
-        window.location.reload()
     }
 
     function checarResposta() {
