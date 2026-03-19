@@ -63,8 +63,8 @@
                 <div class="botao-area">
                     <button onclick="avancar()" id="btnProx" style="display: none;">Avançar</button>
                     <button type="button" id="botao_quiz" style="display: none;" onclick="publicar()">Finalizar</button>
-                    <button type="button" id="botao_novamente" style="display: none;" onclick="tentarNovamente()">Tentar
-                        Novamente</button>
+                    <!-- <button type="button" id="botao_novamente" style="display: none;" onclick="tentarNovamente()">Tentar
+                        Novamente</button> -->
                     <div id="resultado_mensagem" style="display: none;"></div>
                     <span id="spanCertas" style="color: green; padding: 10px;"></span>
                     <span id="spanErradas" style="color: red;"></span>
@@ -162,7 +162,7 @@
         preencherHTMLcomQuestaoAtual(0)
 
         document.getElementById('botao_quiz').style.display = "none"
-        document.getElementById('botao_novamente').style.display = "none"
+        // document.getElementById('botao_novamente').style.display = "none"
     }
 
     function preencherHTMLcomQuestaoAtual(index) {
@@ -323,12 +323,12 @@
 
         if (pontuacaoFinal === quantidadeDeQuestoes) {
             textoParaMensagemFinal = "Parabéns! Você acertou todas as questões!"
-        } else if (pontuacaoFinal >= 2) {
+        } else if (pontuacaoFinal >= 5) {
             textoParaMensagemFinal = "Muito bom! Você tem um bom conhecimento sobre a Stefanini!"
-        } else if (pontuacaoFinal >= 1) {
+        } else if (pontuacaoFinal >= 3) {
             textoParaMensagemFinal = "Você tem um conhecimento razoável sobre a Stefanini, mas pode melhorar!"
         } else {
-            textoParaMensagemFinal = "Parece que você não conhece muito bem a Stefanini. Que tal tentar novamente?"
+            textoParaMensagemFinal = "Parece que você não conhece muito bem a Stefanini."
         }
 
         document.getElementById('resultado_mensagem').style.display = "block"
@@ -339,7 +339,7 @@
 
         document.getElementById('questao').style.display = "none";
         document.getElementById('botao_quiz').style.display = "none";
-        document.getElementById('botao_novamente').style.display = "block";
+        // document.getElementById('botao_novamente').style.display = "block";
         document.getElementById('botao_visualizar').style.display = "block";
     }
 
