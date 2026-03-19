@@ -43,7 +43,7 @@
                 </div>
             </div>
 
-            <form id="stefanini_quiz">
+            <div id="stefanini_quiz">
 
                 <div class="questao-block" id="questao" style="display: none;">
                     <p class="questao-numero"></p>
@@ -63,13 +63,15 @@
                 <div class="botao-area">
                     <button onclick="avancar()" id="btnProx" style="display: none;">Avançar</button>
                     <button type="button" id="botao_quiz" style="display: none;" onclick="publicar()">Finalizar</button>
-                    <button type="button" id="botao_novamente" style="display: none;" onclick="tentarNovamente()">Tentar Novamente</button>
+                    <button type="button" id="botao_novamente" style="display: none;" onclick="tentarNovamente()">Tentar
+                        Novamente</button>
                     <div id="resultado_mensagem" style="display: none;"></div>
                     <span id="spanCertas" style="color: green; padding: 10px;"></span>
                     <span id="spanErradas" style="color: red;"></span>
-                    <button type="button" id="botao_visualizar" style="display: none;" onclick="irParaRanking()">Visualizar Ranking</button>
+                    <button type="button" id="botao_visualizar" style="display: none;"
+                        onclick="irParaRanking()">Visualizar Ranking</button>
                 </div>
-            </form>
+            </div>
         </div>
     </main>
 </body>
@@ -215,18 +217,18 @@
             return false
         }
         checarResposta()
+        numeroDaQuestaoAtual++
 
         habilitarAlternativas(false)
         document.getElementById('btnProx').disabled = true
 
-        if (numeroDaQuestaoAtual < quantidadeDeQuestoes - 1) {
+        if (numeroDaQuestaoAtual < quantidadeDeQuestoes) {
 
-            setTimeout(() => {
-                limparCoresBackgroundOpcoes()
-                desmarcarRadioButtons()
-                preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
-                document.getElementById('btnProx').disabled = false
-            }, 1000);
+            limparCoresBackgroundOpcoes()
+            desmarcarRadioButtons()
+            preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
+            document.getElementById('btnProx').disabled = false
+
         } else {
             document.getElementById('btnProx').style.display = "none"
             document.getElementById('botao_quiz').style.display = "block"
@@ -261,7 +263,6 @@
                 pontuacaoFinal++
                 certas++
                 document.getElementById("spanCertas").innerHTML = `Questões certas: ${certas}`
-                numeroDaQuestaoAtual++
             } else if (option.checked && option.value !== respostaQuestaoAtual) {
                 const wrongLabelId = option.labels[0].id
 
@@ -270,7 +271,6 @@
                 tentativaIncorreta++
                 erradas++
                 document.getElementById("spanErradas").innerHTML = `Questões erradas: ${erradas}`
-                numeroDaQuestaoAtual++
             }
         })
     }
