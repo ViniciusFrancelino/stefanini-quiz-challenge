@@ -60,6 +60,7 @@ header.cabecalho {
     width: 50px;
     height: auto;
     margin-right: 8px;
+    filter: brightness(0) invert(1);
 }
 
 .nav-menu {
